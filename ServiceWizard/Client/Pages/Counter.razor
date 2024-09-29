@@ -1,0 +1,15 @@
+﻿@page "/counter"
+@inject ILogger<Counter> logger
+
+<PageTitle>Counter</PageTitle>
+
+ <Count></Count>
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        logger.LogInformation("Poprawnie otworzono stronę Counter ! ");
+    }
+}
+
+
+

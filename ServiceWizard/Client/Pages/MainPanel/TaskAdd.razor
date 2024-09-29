@@ -1,0 +1,26 @@
+﻿@page "/MainPanel/TaskAdd"
+@using ServiceWizard.Shared.Tasks.Commands
+
+<h1 class="fs-5">Dodaj naprawę:</h1>
+<EditForm Model="@addTask" OnSubmit="OnSubmitMethod" >
+    <DataAnnotationsValidator/>
+    <label for="name">Name</label>
+    <InputText id="name" @bind-Value="addTask.Name" class="form-control"></InputText>
+    <input type="submit" value="Dodaj naprawę" class="btn btn-success form-control">
+    <ValidationSummary/>
+</EditForm>
+
+@code {
+    public AddTaskVm addTask { get; set; } = new();
+    private void OnSubmitMethod(EditContext editContext)
+    {
+        if (editContext.Validate())
+        {
+            Console.WriteLine("Yeah zwalidowano i wysłano!");
+        }
+        else
+        {
+            Console.WriteLine("Dupa nie poszło");
+        }
+    }
+}
