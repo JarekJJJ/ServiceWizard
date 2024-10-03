@@ -1,0 +1,18 @@
+﻿@using ServiceWizard.Shared.Tasks.Commands
+<h1 class="fs-5">Dodaj naprawę:</h1>
+
+<label for="name">Name</label>
+    <InputText id="name" @bind-Value="addTask.Name" class="form-control"></InputText>
+    <ValidationMessage For="()=>addTask.Name"/>
+    <InputSelect id="StatusTask" @bind-Value="addTask.Status" >
+    @foreach (var status in Enum.GetValues(typeof(AddTaskVm.StatusTask)))
+    {
+                <option value="@status">@status</option>
+    }
+    </InputSelect>
+
+@code{
+    [Parameter]
+    public AddTaskVm addTask { get; set; }
+    
+}

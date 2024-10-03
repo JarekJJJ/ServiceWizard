@@ -10,13 +10,16 @@ public class AddTaskVm
 {
     [Required(ErrorMessage ="Pole wymagane")]
     public string Name { get; set; }
+    public StatusTask Status { get; set; }
     //public string? Description { get; set; }
     //public DateTime? AddDate { get; set; } = DateTime.Now;
     //public DateTime? UpdateDate { get; set; }
     //public DateTime? EndDate { get; set; }
-    //public enum StatusTask {
-    //    [Display(Name ="Nowa")]
-    //    New,
-    //    Rozpoczęta,
-    //    Zakończona } 
+    public enum StatusTask
+    {
+        [Display(Name = "Nowa")]
+        New,
+        Rozpoczęta,
+        Zakończona
+    }
 }
