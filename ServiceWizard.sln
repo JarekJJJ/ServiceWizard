@@ -9,17 +9,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceWizard.Client", "Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceWizard.Shared", "ServiceWizard\Shared\ServiceWizard.Shared.csproj", "{6430A08C-FBEF-45B4-927C-3C1F95975603}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceWizard.Application", "ServiceWizard.Application\ServiceWizard.Application.csproj", "{6BD89620-BEAC-48DE-BB4F-EEFA6C465823}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceWizard.Application", "ServiceWizard.Application\ServiceWizard.Application.csproj", "{6BD89620-BEAC-48DE-BB4F-EEFA6C465823}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceWizard.Domain", "ServiceWizard.Domain\ServiceWizard.Domain.csproj", "{9CC3F2BB-BD32-4851-943F-3B6178DD6A27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceWizard.Domain", "ServiceWizard.Domain\ServiceWizard.Domain.csproj", "{9CC3F2BB-BD32-4851-943F-3B6178DD6A27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceWizard.Persistance", "ServiceWizard.Persistance\ServiceWizard.Persistance.csproj", "{A92602C8-9412-4103-BCAB-3B952E08C01B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceWizard.Persistance", "ServiceWizard.Persistance\ServiceWizard.Persistance.csproj", "{A92602C8-9412-4103-BCAB-3B952E08C01B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceWizard.Infrastructure", "ServiceWizard.Infrastructure\ServiceWizard.Infrastructure.csproj", "{1655C2DF-F5C4-4A20-91C1-0A18016B6E8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceWizard.Infrastructure", "ServiceWizard.Infrastructure\ServiceWizard.Infrastructure.csproj", "{1655C2DF-F5C4-4A20-91C1-0A18016B6E8E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{8F0E3E3F-7B8D-451A-9BEB-7FF93BA906E2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{6E658C6C-5211-4751-9B36-8FA3DC910F31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{94911635-5D6C-4DEE-944D-1C30A4BA1B81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +62,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{6BD89620-BEAC-48DE-BB4F-EEFA6C465823} = {94911635-5D6C-4DEE-944D-1C30A4BA1B81}
 		{9CC3F2BB-BD32-4851-943F-3B6178DD6A27} = {6E658C6C-5211-4751-9B36-8FA3DC910F31}
 		{A92602C8-9412-4103-BCAB-3B952E08C01B} = {8F0E3E3F-7B8D-451A-9BEB-7FF93BA906E2}
 		{1655C2DF-F5C4-4A20-91C1-0A18016B6E8E} = {8F0E3E3F-7B8D-451A-9BEB-7FF93BA906E2}

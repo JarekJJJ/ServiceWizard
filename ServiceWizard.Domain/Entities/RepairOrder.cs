@@ -10,7 +10,6 @@ namespace ServiceWizard.Domain.Entities
 {
     public class RepairOrder: AuditableEntity
     {
-        [Required]
         public string Title { get; set; }
         public string? DescrptionService { get; set; }
         public string? DescriptionClient { get; set; }
@@ -19,12 +18,13 @@ namespace ServiceWizard.Domain.Entities
         public decimal? CostEstimate { get; set; }
         [DataType(DataType.Currency)]
         public decimal? CostFinal { get; set; }
+        public string Notes { get; set; }
         public DateTime? EstimatedCompletionDate { get; set; }
-        public int RepairTypeId { get; set; }
+        public int? RepairTypeId { get; set; }
         public RepairType RepairType { get; set; }
-        public int DeviceId { get; set; }
+        public int? DeviceId { get; set; }
         public Device Device { get; set; }
-        public int ClientId { get; set; }
+        public int? ClientId { get; set; }
         public Client Client { get; set; }
     }
 }

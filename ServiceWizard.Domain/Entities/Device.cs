@@ -10,16 +10,13 @@ namespace ServiceWizard.Domain.Entities
 {
     public class Device: AuditableEntity
     {
-        [Required]
         public string Name { get; set; }
         public string? Description { get; set; }
         public string? SerialNumber { get; set; }
         public string? Model { get; set; }
         public string? Manufacturer { get; set; }
         public string? Type { get; set; }
-        public string? Location { get; set; }
-        public string? Status { get; set; }
         public string? Notes { get; set; }
-        public ICollection<RepairOrder> RepairOrders { get; set; }
+        public ICollection<RepairOrder> RepairOrders { get; set; } = new List<RepairOrder>();
     }
 }

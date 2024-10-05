@@ -39,9 +39,11 @@ else
 
 @code {
     private WeatherForecast[]? forecasts;
+    private Clients? clients;
 
     protected override async Task OnInitializedAsync()
     {
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+        clients = await Http.GetFromJsonAsync<Clients>("api/clients/1");
     }
 }

@@ -12,7 +12,7 @@ namespace ServiceWizard.Persistance // Klasa konfiguracyjna standardowa dla wię
 
         public abstract class DesignTimeDbContextFactoryBase<TContext> : IDesignTimeDbContextFactory<TContext> where TContext : DbContext
         {
-        private const string ConnectionStringName = "ServiceWizardDatabase";
+        private const string ConnectionStringName = "DefaultConnection";
         private const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";
         public TContext CreateDbContext(string[] args)
         {

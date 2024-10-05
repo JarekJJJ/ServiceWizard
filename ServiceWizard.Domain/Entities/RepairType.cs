@@ -11,6 +11,6 @@ namespace ServiceWizard.Domain.Entities
     {
         public string Name { get; set; }
         public string? Description { get; set; }
-        public ICollection<RepairOrder> RepairOrders { get; set; }
+        public ICollection<RepairOrder> RepairOrders { get; set; } = new List<RepairOrder>();
     }
 }

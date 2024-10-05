@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ServiceWizard.Application\ServiceWizard.Application.csproj" />
     <ProjectReference Include="..\ServiceWizard.Domain\ServiceWizard.Domain.csproj" />
   </ItemGroup>
 

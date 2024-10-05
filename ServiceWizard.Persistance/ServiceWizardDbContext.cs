@@ -1,16 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using ServiceWizard.Application.Interfaces;
 using ServiceWizard.Domain.Common;
 using ServiceWizard.Domain.Entities;
 using System.Reflection;
 
 namespace ServiceWizard.Persistance
 {
-    public class ServiceWizardDbContext: DbContext
+    public class ServiceWizardDbContext : DbContext, IServiceWizardDbContext
     {
         public ServiceWizardDbContext(DbContextOptions<ServiceWizardDbContext> options) : base(options)
         {
+
         }
+
         public DbSet<Client> Clients { get; set; }
         public DbSet<RepairOrder> RepairOrders { get; set; }
         public DbSet<Device> Devices { get; set; }
@@ -18,7 +21,8 @@ namespace ServiceWizard.Persistance
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());  
+            modelBuilder.SeedData();
         }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -49,5 +53,5 @@ namespace ServiceWizard.Persistance
         }
 
     }
-   
+
 }
