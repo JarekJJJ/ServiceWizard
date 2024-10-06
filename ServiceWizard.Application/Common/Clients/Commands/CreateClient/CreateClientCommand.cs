@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using ServiceWizard.Shared.Clients.Commands.CreateClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace ServiceWizard.Application.Common.Clients.Commands.CreateClient
 {
-    public class CreateClientCommand: IRequest<int>
+    public class CreateClientCommand : IRequest<int>
     {
-        public required string FirstName { get; set; }
-        public required string LastName { get; set; }
-        public string? Email { get; set; }
-        public string? Phone1 { get; set; }
+        public CreateClientVm Client { get; set; }
+        public CreateClientCommand(CreateClientVm client)
+        {
+            Client = client;
+        }
     }
 }

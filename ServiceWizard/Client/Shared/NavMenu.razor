@@ -28,24 +28,45 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="MainPanel/Summary" @onclick="()=>activeSubMenu= !activeSubMenu" Match="NavLinkMatch.All">
+            <NavLink class="nav-link" href="TaskRepair/Summary" @onclick="()=>activeSubMenuRepair= !activeSubMenuRepair" Match="NavLinkMatch.All">
                 <span class="bi bi-tools ps-1 pe-3 fs-4" aria-hidden="true"></span> Naprawy <i class="ms-auto bi bi-plus-lg p-2"/>
             </NavLink>
-            @if (activeSubMenu)
+            @if (activeSubMenuRepair)
             {
                 <ul class="nav flex-column">
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="MainPanel/Summary">
+                        <NavLink class="nav-link" href="TaskRepair/Summary">
                             <span class="bi bi-card-list pe-3 fs-4" aria-hidden="true"></span> Lista napraw
                         </NavLink>
                     </li>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="MainPanel/TaskAdd">
+                        <NavLink class="nav-link" href="TaskRepair/TaskAdd">
                             <span class="bi bi-file-plus pe-3 fs-4" aria-hidden="true"></span> Dodaj naprawę
                         </NavLink>
                     </li>
                 </ul>
                 
+            }
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="Clients/Summary" @onclick="()=>activeSubMenuClients= !activeSubMenuClients" Match="NavLinkMatch.All">
+                <span class="bi bi-people ps-1 pe-3 fs-4" aria-hidden="true"></span> Klienci <i class="ms-auto bi bi-plus-lg p-2" />
+            </NavLink>
+            @if (activeSubMenuClients)
+            {
+                <ul class="nav flex-column">
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="Clients/ListClients">
+                            <span class="bi bi-card-list pe-3 fs-4" aria-hidden="true"></span> Lista klientów
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="Clients/NewClient">
+                            <span class="bi bi-file-plus pe-3 fs-4" aria-hidden="true"></span> Nowy klient
+                        </NavLink>
+                    </li>
+                </ul>
+
             }
         </div>
         <div class="nav-item px-3">
@@ -58,7 +79,8 @@
 
 @code {
     private bool collapseNavMenu = true;
-    private bool activeSubMenu;
+    private bool activeSubMenuRepair;
+    private bool activeSubMenuClients;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 

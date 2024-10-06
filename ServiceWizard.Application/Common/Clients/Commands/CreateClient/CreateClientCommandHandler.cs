@@ -20,10 +20,17 @@ namespace ServiceWizard.Application.Common.Clients.Commands.CreateClient
         {
             Client client = new Client
             {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Email = request.Email,
-                Phone1 = request.Phone1
+                FirstName = request.Client.FirstName,
+                LastName = request.Client.LastName,
+                Email = request.Client.Email,
+                Phone1 = request.Client.Phone1,
+                Phone2 = request.Client.Phone2,
+                Address = request.Client.Address,
+                City = request.Client.City,
+                State = request.Client.State,
+                Zip = request.Client.Zip,
+                Description = request.Client.Description,
+                CreatedBy = "SystemTest" // 
             };
             _context.Clients.Add(client);
             await _context.SaveChangesAsync(cancellationToken);
