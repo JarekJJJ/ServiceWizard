@@ -16,7 +16,7 @@ namespace ServiceWizard.Server.Controllers
             var vm = await Mediator.Send(new GetClientDetailQuery { ClientId = id });
             return vm;
         }
-        [HttpPost("Create")]
+        [HttpPost("create")]
         public async Task<ActionResult> CreateClient([FromBody] CreateClientVm clientVm)
         {
             var command = new CreateClientCommand(clientVm);

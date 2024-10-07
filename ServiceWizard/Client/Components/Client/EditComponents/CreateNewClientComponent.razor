@@ -1,0 +1,54 @@
+﻿@inject IApiBroker apiBroker;
+@using ServiceWizard.Client.Brokers.API
+@using ServiceWizard.Shared.Clients.Commands.CreateClient
+@using ServiceWizard.Shared.Tasks.Commands
+<EditForm Model="@addClient" OnSubmit="OnSubmitMethod">
+    <DataAnnotationsValidator />
+        <div class="row g-3">
+            <div class="col-md-6">
+            <label for="FirstName" class="form-label">Imię <span class="fst-italic fs-6"><ValidationMessage For="()=>addClient.FirstName" /></span> </label>
+            <InputText id="FirstName" @bind-Value="addClient.FirstName" placeholder="Imię" class="form-control"></InputText>          
+            </div>
+            <div class="col-md-6">
+            <label for="LastName" class="form-label fs-6">Nazwisko </label>  <ValidationMessage For="()=>addClient.LastName" />
+                <InputText id="LastName" @bind-Value="addClient.LastName" placeholder="Nazwisko" class="form-control"></InputText>
+            </div>
+        <div class="col-md-5">
+            <label for="Address" class="form-label fs-6">Ulica, nr </label>  <ValidationMessage For="()=>addClient.Address" />
+            <InputText id="Address" @bind-Value="addClient.Address" placeholder="Ulica, nr" class="form-control"></InputText>
+        </div>
+        <div class="col-md-3">
+            <label for="Zip" class="form-label">Kod pocztowy</label>  <ValidationMessage For="()=>addClient.Zip" />
+            <InputText id="Zip" @bind-Value="addClient.Zip" placeholder="kod pocztowy" class="form-control"></InputText>
+        </div>
+        <div class="col-md-4">
+            <label for="City" class="form-label">Miejscowość </label>  <ValidationMessage For="()=>addClient.City" />
+            <InputText id="City" @bind-Value="addClient.City" placeholder="Miejscowość" class="form-control"></InputText>
+        </div>
+        </div>
+        <div class="col-12">
+            <input type="submit" value="Dodaj klienta" class="btn btn-success ">
+        </div>
+</EditForm>
+@*  
+        public string? Description { get; set; }
+
+        public string? Phone1 { get; set; }
+        public string? Phone2 { get; set; } *@
+@code {
+    [Parameter]
+    public CreateClientVm addClient { get; set; }
+    private void OnSubmitMethod(EditContext editContext)
+    {
+        if (editContext.Validate())
+        {
+            Console.WriteLine("Yeah zwalidowano i wysłano!");
+            var id = apiBroker.CreateClientAsync(addClient);
+        }
+        else
+        {
+            Console.WriteLine("Dupa nie poszło");
+        }
+    }
+
+}

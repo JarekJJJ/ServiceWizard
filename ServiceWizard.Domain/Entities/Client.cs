@@ -4,7 +4,8 @@ using System.ComponentModel.DataAnnotations;
 namespace ServiceWizard.Domain.Entities
 {
     public class Client : AuditableEntity
-    {      
+    {
+        [Required(ErrorMessage ="Imię jest wymagane")]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string? Description { get; set; }
