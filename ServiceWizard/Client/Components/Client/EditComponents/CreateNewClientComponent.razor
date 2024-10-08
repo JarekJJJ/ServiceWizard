@@ -4,33 +4,54 @@
 @using ServiceWizard.Shared.Tasks.Commands
 <EditForm Model="@addClient" OnSubmit="OnSubmitMethod">
     <DataAnnotationsValidator />
-        <div class="row g-3">
-            <div class="col-md-6">
-            <label for="FirstName" class="form-label">Imię <span class="fst-italic fs-6"><ValidationMessage For="()=>addClient.FirstName" /></span> </label>
-            <InputText id="FirstName" @bind-Value="addClient.FirstName" placeholder="Imię" class="form-control"></InputText>          
+    <section class="card bg-body-tertiary border-transparent card-line mb-5" id="general">
+        <div class="card-body">
+            <h2 class="fs-5 mb-1">Nowy klient:</h2>
+            <p class="text-body-secondary">Dodaj informacje na temat nowego klienta:</p>
+            <div class="input-group mb-3">
+                <label for="FirstName" class="input-group-text bg-secondary text-light"><i class="bi bi-person"></i>Imię oraz Nazwisko <span class=""></span> </label>
+                <InputText id="FirstName" @bind-Value="addClient.FirstName" class="form-control bg-body"></InputText>
+                <InputText id="LastName" @bind-Value="addClient.LastName" class="form-control bg-body"></InputText>
             </div>
-            <div class="col-md-6">
-            <label for="LastName" class="form-label fs-6">Nazwisko </label>  <ValidationMessage For="()=>addClient.LastName" />
-                <InputText id="LastName" @bind-Value="addClient.LastName" placeholder="Nazwisko" class="form-control"></InputText>
+            <ValidationMessage For="()=>addClient.FirstName" /> <ValidationMessage For="()=>addClient.LastName" />
+            <div class="input-group mb-3">
+                <label for="Address" class="input-group-text bg-secondary text-light">Adres(ulica , nr) </label>  <ValidationMessage For="()=>addClient.Address" />
+                <InputText id="Address" @bind-Value="addClient.Address" class="form-control"></InputText>
             </div>
-        <div class="col-md-5">
-            <label for="Address" class="form-label fs-6">Ulica, nr </label>  <ValidationMessage For="()=>addClient.Address" />
-            <InputText id="Address" @bind-Value="addClient.Address" placeholder="Ulica, nr" class="form-control"></InputText>
+            <ValidationMessage For="()=>addClient.Address" />
+            <div class="input-group mb-3">
+                <label for="ZipAndCity" class="input-group-text bg-secondary text-light">Kod pocztowy, Miasto </label>
+                <InputText id="Zip" @bind-Value="addClient.Zip" placeholder="XX-XXX" class="form-control"></InputText>
+                <InputText id="City" @bind-Value="addClient.City" placeholder="Miejscowość" class="form-control"></InputText>
+            </div>
+            <ValidationMessage For="()=>addClient.Zip" /> <ValidationMessage For="()=>addClient.City" />
+            <div class="input-group mb-3">
+                <label for="Phone" class="input-group-text bg-secondary text-light">Telefony: </label>
+                <InputText id="Phone1" @bind-Value="addClient.Phone1" placeholder="Telefon 1" class="form-control"></InputText>
+                <InputText id="Phone2" @bind-Value="addClient.Phone2" placeholder="Telefon 2" class="form-control"></InputText>
+            </div>
+            <ValidationMessage For="()=>addClient.Phone1" /> <ValidationMessage For="()=>addClient.Phone2" />
+            <div class="input-group mb-3">
+                <label for="Email" class="input-group-text bg-secondary text-light">Email </label>  <ValidationMessage For="()=>addClient.Email" />
+                <InputText id="Email" @bind-Value="addClient.Email" placeholder="email" class="form-control"></InputText>
+
+            </div>
+            
+            <div class="mb-3">
+                <hr class="text-light ps-3 pe-3" />
+                <label for="Description" class="form-label">Opis</label>
+                <div class="form-text" id="labelForDescription">Tutaj możemy dodać dodatkowe informacje o kliencie np. nie dzwonić przed 15:00</div>
+                <InputTextArea id="Description" @bind-Value="addClient.Description" class="form-control" rows="4"></InputTextArea>
+            </div>
+       
+            <ValidationMessage For="()=>addClient.Description" />
+            <div class="input-group mb-3">
+                <button type="submit" class="btn btn-primary">Zapisz</button>
+            </div>
         </div>
-        <div class="col-md-3">
-            <label for="Zip" class="form-label">Kod pocztowy</label>  <ValidationMessage For="()=>addClient.Zip" />
-            <InputText id="Zip" @bind-Value="addClient.Zip" placeholder="kod pocztowy" class="form-control"></InputText>
-        </div>
-        <div class="col-md-4">
-            <label for="City" class="form-label">Miejscowość </label>  <ValidationMessage For="()=>addClient.City" />
-            <InputText id="City" @bind-Value="addClient.City" placeholder="Miejscowość" class="form-control"></InputText>
-        </div>
-        </div>
-        <div class="col-12">
-            <input type="submit" value="Dodaj klienta" class="btn btn-success ">
-        </div>
+    </section>
 </EditForm>
-@*  
+@*
         public string? Description { get; set; }
 
         public string? Phone1 { get; set; }
