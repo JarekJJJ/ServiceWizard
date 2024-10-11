@@ -10,7 +10,7 @@ namespace ServiceWizard.Client.Brokers.API
         {
             _httpClient = httpClient;
         }
-        public async Task<T> GetAsync<T>(string apiUrl) =>
+        public async Task<T> GetAllAsync<T>(string apiUrl) =>
             await _httpClient.GetFromJsonAsync<T>(apiUrl);
 
 

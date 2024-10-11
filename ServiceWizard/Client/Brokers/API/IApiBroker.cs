@@ -4,7 +4,7 @@ namespace ServiceWizard.Client.Brokers.API
 {
     public partial interface IApiBroker
     {
-        Task<T> GetAsync<T>(string apiUrl);
+        Task<T> GetAllAsync<T>(string apiUrl);
         Task CreateClientAsync(CreateClientVm clientVm);
     }
 }

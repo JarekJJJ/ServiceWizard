@@ -1,7 +1,8 @@
 ﻿@page "/Clients/ListClients"
-
-<h3>listClients</h3>
+@using ServiceWizard.Client.Components.Client.GetComponents
+@using ServiceWizard.Shared.Clients.Queries.GetAllClients
+<ListClientComponent />
 
 @code {
-
+    public List<ClientForListVm> listClients { get; set; } = new List<ClientForListVm>();
 }
