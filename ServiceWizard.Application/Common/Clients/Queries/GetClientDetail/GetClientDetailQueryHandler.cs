@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ServiceWizard.Application.Interfaces;
+using ServiceWizard.Shared.Clients.Queries.GetAllClients;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace ServiceWizard.Application.Common.Clients.Queries.GetClientDetail
         }
         public async Task<ClientDetailVm> Handle(GetClientDetailQuery request, CancellationToken cancellationToken)
         {
-            var client = await _context.Clients.Include(p=>p.RepairOrders).Where(x => x.Id == request.ClientId).FirstOrDefaultAsync(cancellationToken);
+           var client = await _context.Clients.Include(p=>p.RepairOrders).Where(x => x.Id == request.ClientId).FirstOrDefaultAsync(cancellationToken);
             if (client != null)
             {
                 var lastRepairTitle = client.RepairOrders?.OrderByDescending(x => x.Created).FirstOrDefault()?.Title ?? "Brak napraw";

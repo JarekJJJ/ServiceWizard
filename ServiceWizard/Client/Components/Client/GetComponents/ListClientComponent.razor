@@ -1,13 +1,35 @@
-﻿@using ServiceWizard.Client.Brokers.API
+﻿@using ServiceWizard.Client.Components.Client.EditComponents
+@using ServiceWizard.Client.Service.Clients
 @using ServiceWizard.Shared.Clients.Queries.GetAllClients
-@inject HttpClient HttpClient;
-@inject IApiBroker apiBroker;
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@inject IClientsService clientsService;
 <div class="content-wrapper">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Lista klientów</h3>
-            <div class="card-tools">
-                
+            <div class="col-12 text-center">
+                <h3 class="card-title fs-6 fw-bold">Lista klientów</h3>
+            </div>
+            <div class="row row-cols-lg-auto g-3 align-items-center">
+                <div class="col-12">
+                    <a class="btn btn-primary" href="/Clients/NewClient">Dodaj nowego klienta</a>
+                </div>
+                <div class="col-12">
+                    <div class="input-group">
+                        <input type="text" @bind="searchString" class="form-control" placeholder="szukaj klienta ..." aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2" @onclick="()=> SearchResult(searchString)"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="input-group">
+                    <label class="input-group-text" for="pageSize">Elementy na stronie:</label>
+                    <select class="form-select" aria-label="pageSize" id="pageSize" @onchange="PageSizeChanged">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    </div
+                </div>
             </div>
         </div>
         <div class="card-body p-0">
@@ -34,17 +56,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if(listClients != null)
+                    @if (listClients != null)
+                    {                                      
+                    @if(listClients.Count == 0)
                     {
-                        @foreach (var client in listClients)
-                        {
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                <div>
+                                    <span>Brak danych</span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <Virtualize Items="listClients" Context="client" ItemSize="@pageSize">
+                        <ItemContent>
                             <tr>
                                 <td>
                                     @client.Id
                                 </td>
                                 <td>
                                     <a>
-                                     <span class="fw-bold">@client.FirstName @client.LastName </span>
+                                        <span class="fw-bold">@client.FirstName @client.LastName </span>
                                     </a>
                                     <br />
                                     <small>
@@ -72,7 +104,7 @@
                                         </i>
                                         View
                                     </a>
-                                    <a class="btn btn-info btn-sm" href="#">
+                                    <a class="btn btn-info btn-sm" role="button" @onclick="()=>EditClient(client.Id)">
                                         <i class="fas fa-pencil-alt">
                                         </i>
                                         Edit
@@ -84,34 +116,150 @@
                                     </a>
                                 </td>
                             </tr>
-                        }
+                        </ItemContent>
+                        <Placeholder>
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    <div class="spinner-border text-info" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <div>
+                                        <span>Ładowanie danych...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </Placeholder>
+                        </Virtualize>
                     }
                     else
                     {
-                        <tr>
-                            <td colspan="6" class="text-center">
-                                <div class="alert alert-warning" role="alert">
-                                    No Clients Found
-                                </div>
-                            </td>
-                        </tr>
+                         <tr>
+                                <td colspan="6" class="text-center">
+                                    <div class="spinner-border text-info" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <div>
+                                        <span>Ładowanie danych...</span>
+                                    </div>
+                                </td>
+                            </tr>
                     }
-                  
-                    
-
                 </tbody>
             </table>
         </div>
-        <!-- /.card-body -->
+        <!-- card-body -->
+        <div class="col-12">
+            <nav aria-label="...">
+                <ul class="pagination justify-content-center">
+                  
+                    <li class="page-item">
+                         <a class="page-link" role="button" @onclick="()=>PageChanged(curentPage-1)">Poprzednia</a>
+                    </li>
+                    @for(int i = 1; i <= totalPages; i++)
+                       {
+                        var pageIndex = i;
+                        <li class="page-item @(curentPage == i ? "active" : "")">
+                         <a class="page-link" role="button" @onclick="() => PageChanged(pageIndex)">@i</a>
+                         </li>
+                       }              
+                    <li class="page-item">
+                        <a class="page-link" role="button" @onclick="()=>PageChanged(curentPage+1)">Następna</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </div>
+@if (editClientView)
+{
+    <EditClientComponent clientId="@clientId" OnClientUpdated="HandleClientUpdated" ReloadTrigger="@reloadTrigger" />
+}
+
 
 @code {
 
     public List<ClientForListVm> listClients { get; set; }
+    public ListClientForListVm resultApiListClient { get; set; } = new ListClientForListVm();
+    public int curentPage { get; set; } = 1;
+    public int totalClients { get; set; }
+    private int pageSize  = 10;
+    private string searchString = string.Empty;
+    private int totalPages;
+    private bool editClientView = false;
+    private int clientId;
+    private int reloadTrigger = 0;
+
+
     protected override async Task OnInitializedAsync()
     {
-        listClients = await HttpClient.GetFromJsonAsync<List<ClientForListVm>>("api/clients/get/all");
+
+        await LoadClients();
+    }
+    protected async Task LoadClients()
+    {
+        var resultApiListClient = await clientsService.GetAllClientsAsync(curentPage, pageSize);
+        listClients = resultApiListClient.ListClients;
+        totalClients = resultApiListClient.TotalClients;
+        totalPages = (int)Math.Ceiling(totalClients / (double)pageSize);
+    }
+     private async Task HandleClientUpdated(bool isUpdated)
+    {
+        if (isUpdated)
+        {
+         await LoadClients();
+        StateHasChanged();
+        }
     }
 
+    protected async Task SearchResult(string searchString)
+    {
+        if (!String.IsNullOrEmpty(searchString))
+        {
+            listClients = await clientsService.GetBySearchStringAsync(searchString);
+            StateHasChanged();
+        }
+        else
+        {
+            await LoadClients();
+            StateHasChanged();
+        }
+    }
+
+    private async Task PageSizeChanged(ChangeEventArgs e)
+    {
+        pageSize = int.Parse(e.Value.ToString());
+        if (pageSize == 0)
+        {
+            pageSize = 10;
+        }
+        curentPage = 1;
+        await LoadClients();
+        StateHasChanged();
+    }
+    private async Task PageChanged(int page)
+    {
+        if(page < 1)
+        {
+            page = 1;
+        }
+        if(page > totalPages)
+        {
+            page = totalPages;
+        }
+        curentPage = page;
+
+        await LoadClients();
+        StateHasChanged();
+    }
+    private async Task EditClient(int id)
+    {
+       clientId = id;
+       StateHasChanged();
+       editClientView = true;
+    }
+    private void ReloadComponent()
+    {
+        reloadTrigger++; // Zmieniamy wartość, aby wymusić przeładowanie
+    }
 }
+

@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceWizard.Application.Common.Clients.Queries.GetClientDetail
+namespace ServiceWizard.Application.Common.Clients.Queries.GetClientView
 {
-    public class GetClientDetailQuery : IRequest<ClientDetailVm>
+    public class GetClientViewQuery: IRequest<ClientForListVm>
     {
         public int ClientId { get; set; }
+
     }
 }

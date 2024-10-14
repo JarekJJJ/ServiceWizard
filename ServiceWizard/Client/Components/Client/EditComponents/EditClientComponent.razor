@@ -1,10 +1,14 @@
-﻿@inject IApiBroker apiBroker;
-@using ServiceWizard.Client.Brokers.API
+﻿@using ServiceWizard.Client.Brokers.API
+@using ServiceWizard.Client.Service.Clients
 @using ServiceWizard.Shared.Clients.Commands.CreateClient
+@using ServiceWizard.Shared.Clients.Queries.GetAllClients
 @using ServiceWizard.Shared.Tasks.Commands
-@if(!addClientOk)
+@inject IClientsService clientsService;
+
+<h3>EditClientComponent</h3>
+@if(addClient != null)
 {
-<EditForm Model="@addClient" OnSubmit="OnSubmitMethod">
+<EditForm Model="@addClient" OnSubmit="OnSubmitMethodAsync">
     <DataAnnotationsValidator />
     <section class="card bg-body-tertiary border-transparent card-line mb-5" id="general">
         <div class="card-body">
@@ -38,14 +42,14 @@
                 <InputText id="Email" @bind-Value="addClient.Email" placeholder="email" class="form-control"></InputText>
 
             </div>
-            
+
             <div class="mb-3">
                 <hr class="text-light ps-3 pe-3" />
                 <label for="Description" class="form-label">Opis</label>
                 <div class="form-text" id="labelForDescription">Tutaj możemy dodać dodatkowe informacje o kliencie np. nie dzwonić przed 15:00</div>
                 <InputTextArea id="Description" @bind-Value="addClient.Description" class="form-control" rows="4"></InputTextArea>
             </div>
-       
+
             <ValidationMessage For="()=>addClient.Description" />
             <div class="input-group mb-3">
                 <button type="submit" class="btn btn-primary">Zapisz</button>
@@ -56,27 +60,54 @@
 }
 else
 {
-    <div class="alert alert-success" role="alert">
-        <p>Klient został dodany
-            <button class="btn btn-success" @onclick="RefreshState">Dodaj kolejnego</button>
-        </p>
+    <div class="spinner-border text-info" role="status">
+        <span class="visually-hidden">Loading...</span>
     </div>
-
+    <div>
+        <span>Ładowanie danych...</span>
+    </div>
 }
 
 @code {
     [Parameter]
-    public CreateClientVm addClient { get; set; }
+    public int clientId { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnClientUpdated { get; set; }
+    [Parameter]
+    public int ReloadTrigger { get; set; }
+    public ClientForListVm addClient { get; set; } 
+    //public ClientForListVm GetClientForListVm { get; set; }
     private bool addClientOk = false;
-    private void OnSubmitMethod(EditContext editContext)
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadData();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+
+    }
+    private async Task LoadData()
+    {
+        addClient = null;
+        addClient = await clientsService.GetClientViewAsync(clientId);
+      
+    }
+    private async Task OnSubmitMethodAsync(EditContext editContext)
     {
         if (editContext.Validate())
         {
             Console.WriteLine("Yeah zwalidowano i wysłano!");
-            var id = apiBroker.CreateClientAsync(addClient);
-            if(id != null)
+            var task =  clientsService.EditClientAsync(clientId, addClient);
+            await task;
+            if (task.IsCompletedSuccessfully)
             {
-               addClientOk = true;
+                addClientOk = true;
+                await OnClientUpdated.InvokeAsync(true);
+
+
+            await LoadData();
+
             }
             else
             {
@@ -88,12 +119,6 @@ else
         {
             Console.WriteLine("Dupa nie poszło");
         }
-    }
-    private void RefreshState()
-    {      
-        addClient = new CreateClientVm();
-        addClientOk = false;
-        StateHasChanged();
     }
 
 }

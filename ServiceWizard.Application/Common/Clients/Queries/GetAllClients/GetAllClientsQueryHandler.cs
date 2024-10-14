@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ServiceWizard.Application.Common.Clients.Queries.CommonHelpers;
 using ServiceWizard.Application.Interfaces;
 using ServiceWizard.Domain.Entities;
 using ServiceWizard.Shared.Clients.Queries.GetAllClients;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ServiceWizard.Application.Common.Clients.Queries.GetAllClients
 {
-    public class GetAllClientsQueryHandler : IRequestHandler<GetAllClientsQuery, List<ClientForListVm>>
+    public class GetAllClientsQueryHandler : IRequestHandler<GetAllClientsQuery, ListClientForListVm>
     {
         public readonly IServiceWizardDbContext _context;
         public GetAllClientsQueryHandler(IServiceWizardDbContext serviceWizardDbContext)
@@ -20,39 +21,19 @@ namespace ServiceWizard.Application.Common.Clients.Queries.GetAllClients
             _context = serviceWizardDbContext;
         }
 
-        public async Task<List<ClientForListVm>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
+        public async Task<ListClientForListVm> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
         {
-            var clients = await _context.Clients.ToListAsync(cancellationToken);   
+            var clients = await _context.Clients.ToListAsync(cancellationToken);
             if (clients != null)
             {
-                return MapClientsToVm(clients);
+                var clientListVm = new ListClientForListVm();
+                clientListVm.TotalClients = clients.Count;
+                var clientsToRequest = clients.Skip((request.CurrentPage - 1) * request.PageSize).Take(request.PageSize).ToList();
+                clientListVm.ListClients = MapperForClient.MapClientToClientForListVm(clientsToRequest);
+                return clientListVm;
+
             }
-            return new List<ClientForListVm>(); 
-                }
-        private List<ClientForListVm> MapClientsToVm(List<Client> clients)
-        {
-            var mapedClientToVm = new List<ClientForListVm>();
-            foreach (var client in clients)
-            {
-                var clientVm = new ClientForListVm
-                {
-                    Id = client.Id,
-                    FirstName = client.FirstName,
-                    LastName = client.LastName,
-                    Email = client.Email,
-                    Phone1 = client.Phone1,
-                    Phone2 = client.Phone2,
-                    Address = client.Address,
-                    City = client.City,
-                    State = client.State,
-                    Zip = client.Zip,
-                    Description = client.Description,
-                    Created = client.Created,
-                    StatusId = client.StatusId
-                };
-                mapedClientToVm.Add(clientVm);
-            }
-            return mapedClientToVm;
+            return new ListClientForListVm();
         }
     }
 }
