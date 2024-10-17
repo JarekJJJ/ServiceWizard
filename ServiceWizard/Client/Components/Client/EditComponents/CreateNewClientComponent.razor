@@ -4,54 +4,34 @@
 @using ServiceWizard.Shared.Tasks.Commands
 @if(!addClientOk)
 {
-<EditForm Model="@addClient" OnSubmit="OnSubmitMethod">
+<EditForm Model="@addClient" OnValidSubmit="OnSubmitMethod">
     <DataAnnotationsValidator />
-    <section class="card bg-body-tertiary border-transparent card-line mb-5" id="general">
-        <div class="card-body">
-            <h2 class="fs-5 mb-1">Nowy klient:</h2>
-            <p class="text-body-secondary">Dodaj informacje na temat nowego klienta:</p>
-            <div class="input-group mb-3">
-                <label for="FirstName" class="input-group-text bg-secondary text-light"><i class="bi bi-person"></i>Imię oraz Nazwisko <span class=""></span> </label>
-                <InputText id="FirstName" @bind-Value="addClient.FirstName" class="form-control bg-body"></InputText>
-                <InputText id="LastName" @bind-Value="addClient.LastName" class="form-control bg-body"></InputText>
-            </div>
-            <ValidationMessage For="()=>addClient.FirstName" /> <ValidationMessage For="()=>addClient.LastName" />
-            <div class="input-group mb-3">
-                <label for="Address" class="input-group-text bg-secondary text-light">Adres(ulica , nr) </label>  <ValidationMessage For="()=>addClient.Address" />
-                <InputText id="Address" @bind-Value="addClient.Address" class="form-control"></InputText>
-            </div>
-            <ValidationMessage For="()=>addClient.Address" />
-            <div class="input-group mb-3">
-                <label for="ZipAndCity" class="input-group-text bg-secondary text-light">Kod pocztowy, Miasto </label>
-                <InputText id="Zip" @bind-Value="addClient.Zip" placeholder="XX-XXX" class="form-control"></InputText>
-                <InputText id="City" @bind-Value="addClient.City" placeholder="Miejscowość" class="form-control"></InputText>
-            </div>
-            <ValidationMessage For="()=>addClient.Zip" /> <ValidationMessage For="()=>addClient.City" />
-            <div class="input-group mb-3">
-                <label for="Phone" class="input-group-text bg-secondary text-light">Telefony: </label>
-                <InputText id="Phone1" @bind-Value="addClient.Phone1" placeholder="Telefon 1" class="form-control"></InputText>
-                <InputText id="Phone2" @bind-Value="addClient.Phone2" placeholder="Telefon 2" class="form-control"></InputText>
-            </div>
-            <ValidationMessage For="()=>addClient.Phone1" /> <ValidationMessage For="()=>addClient.Phone2" />
-            <div class="input-group mb-3">
-                <label for="Email" class="input-group-text bg-secondary text-light">Email </label>  <ValidationMessage For="()=>addClient.Email" />
-                <InputText id="Email" @bind-Value="addClient.Email" placeholder="email" class="form-control"></InputText>
+    <MudGrid>
+        <MudItem xs="12" md="6">
+            <MudCard>
+                <MudCardHeader>
+                    <MudText Typo="Typo.h6">Nowy klient</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                        <MudTextField Label="Imię" HelperText="pole wymagane" @bind-Value="addClient.FirstName" Variant="Variant.Outlined" Margin="Margin.Dense" For="@(()=>addClient.FirstName)" />
+                    <MudTextField Label="Nazwisko" HelperText="pole wymagane" @bind-Value="addClient.LastName" For="@(()=>addClient.LastName)" />
+                    <MudTextField Label="Adres" HelperText="ulica oraz numer" @bind-Value="addClient.Address" For="@(()=>addClient.Address)"/>
+                    <MudTextField Label="Kod pocztowy" HelperText="XX-XXX" @bind-Value="addClient.Zip" />
+                    <MudTextField Label="Miasto" HelperText="Miejscowość" @bind-Value="addClient.City" />
+                    <MudTextField Label="Telefon 1" HelperText="numer telefonu" @bind-Value="addClient.Phone1" />
+                    <MudTextField Label="Telefon 2" HelperText="numer telefonu" @bind-Value="addClient.Phone2" />
+                    <MudTextField Label="Email" HelperText="email" @bind-Value="addClient.Email" />
+                    <MudTextField Label="Opis" HelperText="dodatkowe informacje" @bind-Value="addClient.Description" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit">Zapisz</MudButton>
 
-            </div>
-            
-            <div class="mb-3">
-                <hr class="text-light ps-3 pe-3" />
-                <label for="Description" class="form-label">Opis</label>
-                <div class="form-text" id="labelForDescription">Tutaj możemy dodać dodatkowe informacje o kliencie np. nie dzwonić przed 15:00</div>
-                <InputTextArea id="Description" @bind-Value="addClient.Description" class="form-control" rows="4"></InputTextArea>
-            </div>
-       
-            <ValidationMessage For="()=>addClient.Description" />
-            <div class="input-group mb-3">
-                <button type="submit" class="btn btn-primary">Zapisz</button>
-            </div>
-        </div>
-    </section>
+                    </MudCardActions>                 
+              
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+   
 </EditForm>
 }
 else
@@ -73,7 +53,7 @@ else
         if (editContext.Validate())
         {
             Console.WriteLine("Yeah zwalidowano i wysłano!");
-            var id = apiBroker.CreateClientAsync(addClient);
+            var id =  apiBroker.CreateClientAsync(addClient);
             if(id != null)
             {
                addClientOk = true;

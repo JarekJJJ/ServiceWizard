@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using ServiceWizard.Application.Common.Models;
 using ServiceWizard.Application.Interfaces;
 using ServiceWizard.Domain.Common;
 using ServiceWizard.Domain.Entities;
@@ -7,7 +10,7 @@ using System.Reflection;
 
 namespace ServiceWizard.Persistance
 {
-    public class ServiceWizardDbContext : DbContext, IServiceWizardDbContext
+    public class ServiceWizardDbContext : IdentityDbContext<ApiUser>, IServiceWizardDbContext
     {
         public ServiceWizardDbContext(DbContextOptions<ServiceWizardDbContext> options) : base(options)
         {
@@ -21,6 +24,10 @@ namespace ServiceWizard.Persistance
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<IdentityUserLogin<string>>().HasNoKey();
+            modelBuilder.Entity<IdentityUserRole<string>>().HasNoKey();
+            modelBuilder.Entity<IdentityUserToken<string>>().HasNoKey();
+
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());  
             modelBuilder.SeedData();
         }

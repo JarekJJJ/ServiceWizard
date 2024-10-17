@@ -3,173 +3,74 @@
 @using ServiceWizard.Shared.Clients.Queries.GetAllClients
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @inject IClientsService clientsService;
-<div class="content-wrapper">
-    <div class="card">
-        <div class="card-header">
-            <div class="col-12 text-center">
-                <h3 class="card-title fs-6 fw-bold">Lista klientów</h3>
-            </div>
-            <div class="row row-cols-lg-auto g-3 align-items-center">
-                <div class="col-12">
-                    <a class="btn btn-primary" href="/Clients/NewClient">Dodaj nowego klienta</a>
-                </div>
-                <div class="col-12">
-                    <div class="input-group">
-                        <input type="text" @bind="searchString" class="form-control" placeholder="szukaj klienta ..." aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2" @onclick="()=> SearchResult(searchString)"><i class="bi bi-search"></i></button>
+<MudText Typo="Typo.h3">Lista klientów</MudText>
+<MudTable Items="listClients" Height="600px" Breakpoint="Breakpoint.Sm" Virtualize="true" ItemSize="30" FixedHeader="true">
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Imię i Nazwisko</MudTh>
+        <MudTh>dane teleadresowe</MudTh>
+        <MudTh>Ostatnie naprawy</MudTh>
+        <MudTh>Status</MudTh>
+        <MudTh>Akcje</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Id</MudTd>
+        <MudTd>
+            <a>
+                <span class="fw-bold">@context.FirstName @context.LastName </span>
+            </a>
+            <br />
+            <small>
+                Dodano: @context.Created.ToString("dd/MM/yyyy")
+            </small>
+        </MudTd>
+        <MudTd>
+            <ul class="ml-4 mb-0 fa-ul text-muted">
+                <li class="small"><span class="fa-li"><i class="bi bi-building"></i></span> Adres:@context.Address, @context.Zip @context.City</li>
+                <li class="small"><span class="fa-li"><i class="bi bi-phone"></i></span> Tel1: @context.Phone1 Tel2: @context.Phone2 </li>
+                <li class="small"><span class="fa-li"><i class="bi bi-envelope"></i></span> Email: @context.Email</li>
+            </ul>
+        </MudTd>
+        <MudTd class="">
+            <p></p>
+        </MudTd>
+        <MudTd class="">
+            <MudChip T="string" Color="@(context.StatusId == 1 ? Color.Success : Color.Error)">
+                @(context.StatusId == 1 ? "aktywny" : "nieaktywny")</MudChip>        
+        </MudTd>
+        <MudTd class="project-actions text-right">
+           @*  <a class="btn btn-primary btn-sm" href="#">
+                <i class="fas fa-folder">
+                </i>
+                View
+            </a>
+            <a class="btn btn-info btn-sm" role="button" @onclick="()=>EditClient(context.Id)">
+                <i class="fas fa-pencil-alt">
+                </i>
+                Edit
+            </a>
+            <a class="btn btn-danger btn-sm" href="#">
+                <i class="fas fa-trash">
+                </i>
+                Delete
+            </a> *@
+        </MudTd>
+        </RowTemplate>
+        <LoadingContent>
+            <tr>
+                <td colspan="6" class="text-center">
+                    <div class="spinner-border text-info" role="status">
+                        <span class="visually-hidden">Loading...</span>
                     </div>
-                </div>
-                <div class="col-12">
-                    <div class="input-group">
-                    <label class="input-group-text" for="pageSize">Elementy na stronie:</label>
-                    <select class="form-select" aria-label="pageSize" id="pageSize" @onchange="PageSizeChanged">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                    </div
-                </div>
-            </div>
-        </div>
-        <div class="card-body p-0">
-            <table class="table table-striped align-middle">
-                <thead>
-                    <tr>
-                        <th style="width: 1%">
-                            Id
-                        </th>
-                        <th style="width: 20%">
-                            Imię i Nazwisko
-                        </th>
-                        <th style="width: 30%">
-                            dane teleadresowe
-                        </th>
-                        <th>
-                            Ostatnie naprawy
-                        </th>
-                        <th style="width: 8%" class="text-center">
-                            Status
-                        </th>
-                        <th style="width: 20%">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (listClients != null)
-                    {                                      
-                    @if(listClients.Count == 0)
-                    {
-                        <tr>
-                            <td colspan="6" class="text-center">
-                                <div>
-                                    <span>Brak danych</span>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                    <Virtualize Items="listClients" Context="client" ItemSize="@pageSize">
-                        <ItemContent>
-                            <tr>
-                                <td>
-                                    @client.Id
-                                </td>
-                                <td>
-                                    <a>
-                                        <span class="fw-bold">@client.FirstName @client.LastName </span>
-                                    </a>
-                                    <br />
-                                    <small>
-                                        Dodano: @client.Created.ToString("dd/MM/yyyy")
-                                    </small>
-                                </td>
-                                <td>
-                                    <ul class="ml-4 mb-0 fa-ul text-muted">
-                                        <li class="small"><span class="fa-li"><i class="bi bi-building"></i></span> Adres:@client.Address, @client.Zip @client.City</li>
-                                        <li class="small"><span class="fa-li"><i class="bi bi-phone"></i></span> Tel1: @client.Phone1 Tel2: @client.Phone2 </li>
-                                        <li class="small"><span class="fa-li"><i class="bi bi-envelope"></i></span> Email: @client.Email</li>
-                                    </ul>
-                                </td>
-                                <td class="">
-                                    <p></p>
-                                </td>
-                                <td class="">
-                                    <span class="badge @(client.StatusId == 1 ? "text-bg-success" : "text-bg-light")">
-                                        @(client.StatusId == 1 ? "aktywny" : "nieaktywny")
-                                    </span>
-                                </td>
-                                <td class="project-actions text-right">
-                                    <a class="btn btn-primary btn-sm" href="#">
-                                        <i class="fas fa-folder">
-                                        </i>
-                                        View
-                                    </a>
-                                    <a class="btn btn-info btn-sm" role="button" @onclick="()=>EditClient(client.Id)">
-                                        <i class="fas fa-pencil-alt">
-                                        </i>
-                                        Edit
-                                    </a>
-                                    <a class="btn btn-danger btn-sm" href="#">
-                                        <i class="fas fa-trash">
-                                        </i>
-                                        Delete
-                                    </a>
-                                </td>
-                            </tr>
-                        </ItemContent>
-                        <Placeholder>
-                            <tr>
-                                <td colspan="6" class="text-center">
-                                    <div class="spinner-border text-info" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                    <div>
-                                        <span>Ładowanie danych...</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        </Placeholder>
-                        </Virtualize>
-                    }
-                    else
-                    {
-                         <tr>
-                                <td colspan="6" class="text-center">
-                                    <div class="spinner-border text-info" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                    <div>
-                                        <span>Ładowanie danych...</span>
-                                    </div>
-                                </td>
-                            </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <!-- card-body -->
-        <div class="col-12">
-            <nav aria-label="...">
-                <ul class="pagination justify-content-center">
-                  
-                    <li class="page-item">
-                         <a class="page-link" role="button" @onclick="()=>PageChanged(curentPage-1)">Poprzednia</a>
-                    </li>
-                    @for(int i = 1; i <= totalPages; i++)
-                       {
-                        var pageIndex = i;
-                        <li class="page-item @(curentPage == i ? "active" : "")">
-                         <a class="page-link" role="button" @onclick="() => PageChanged(pageIndex)">@i</a>
-                         </li>
-                       }              
-                    <li class="page-item">
-                        <a class="page-link" role="button" @onclick="()=>PageChanged(curentPage+1)">Następna</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-</div>
+                    <div>
+                        <span>Ładowanie danych...</span>
+                    </div>
+                </td>
+            </tr>
+            </LoadingContent>
+</MudTable>
+           
+       
 @if (editClientView)
 {
     <EditClientComponent clientId="@clientId" OnClientUpdated="HandleClientUpdated" ReloadTrigger="@reloadTrigger" />
@@ -182,7 +83,7 @@
     public ListClientForListVm resultApiListClient { get; set; } = new ListClientForListVm();
     public int curentPage { get; set; } = 1;
     public int totalClients { get; set; }
-    private int pageSize  = 10;
+    private int pageSize  = 20;
     private string searchString = string.Empty;
     private int totalPages;
     private bool editClientView = false;

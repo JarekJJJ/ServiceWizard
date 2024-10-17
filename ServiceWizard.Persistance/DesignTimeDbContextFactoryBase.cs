@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using ServiceWizard.Application.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 namespace ServiceWizard.Persistance // Klasa konfiguracyjna standardowa dla większości projektów EF + SQL
 {
 
-        public abstract class DesignTimeDbContextFactoryBase<TContext> : IDesignTimeDbContextFactory<TContext> where TContext : DbContext
+        public abstract class DesignTimeDbContextFactoryBase<TContext> : IDesignTimeDbContextFactory<TContext> where TContext : IdentityDbContext<ApiUser>
         {
         private const string ConnectionStringName = "DefaultConnection";
         private const string AspNetCoreEnvironment = "ASPNETCORE_ENVIRONMENT";

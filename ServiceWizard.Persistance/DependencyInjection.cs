@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ServiceWizard.Application.Common.Models;
 using ServiceWizard.Application.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,10 @@ namespace ServiceWizard.Persistance
         {
             services.AddDbContext<ServiceWizardDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-            
+            services.AddIdentityCore<ApiUser>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ServiceWizardDbContext>();
+
             services.AddScoped<IServiceWizardDbContext, ServiceWizardDbContext>();
 
             return services;

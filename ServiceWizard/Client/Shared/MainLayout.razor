@@ -1,27 +1,65 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-       <TopMenu></TopMenu>
-
-        <article class="content px-4">
-            <ErrorBoundary @ref="errorBoundary">
-<ChildContent>
-                    @Body
-</ChildContent>
-<ErrorContent>
-    <p>Wystąpił wyjątek ! </p>
-</ErrorContent>
-            </ErrorBoundary>
-           
-        </article>
-    </main>
-</div>
-@code{
+<MudThemeProvider IsDarkMode="darkMode" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudLayout>
+    <MudAppBar Color="Color.Primary" DarkMode="darkMode" Class="ms-auto" Elevation="4" Style="z-index: 1000">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" OnClick="DrawerToggle" />
+        <MudImage Src="media/logo/koloWhite.png" Alt="logo" Elevation="0" Width="50" Class="" />
+        <MudText Variant="Typo.h5" Class="ms-4">Service Wizard </MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.WbSunny" OnClick="DarkModeToggle" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="4" Breakpoint="Breakpoint.Md" Variant="@DrawerVariant.Mini">
+        <MudNavMenu>
+            <MudNavLink Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">
+                Strona główna
+            </MudNavLink>
+            <MudNavGroup Title="Naprawy" Icon="@Icons.Material.Filled.Build">
+                                <MudNavLink Href="MainPanel/TaskAdd" Icon="@Icons.Material.Filled.Add">
+                    Dodaj naprawę
+                </MudNavLink>
+                <MudNavLink Href="MainPanel/TaskList" Icon="@Icons.Material.Filled.List">
+                    Lista napraw
+                </MudNavLink>
+            </MudNavGroup>
+            <MudNavGroup Title="Klienci" Icon="@Icons.Material.Filled.People">
+                <MudNavLink Href="Clients/ListClients" Icon="@Icons.Material.Filled.List">
+                    Lista klientów
+                </MudNavLink>
+                <MudNavLink Href="Clients/NewClient" Icon="@Icons.Material.Filled.Add">
+                    Dodaj klienta
+                </MudNavLink>
+                </MudNavGroup>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+@* <article class="content px-4">
+    <ErrorBoundary @ref="errorBoundary">
+        <ChildContent>
+            @Body
+        </ChildContent>
+        <ErrorContent>
+            <p>Wystąpił wyjątek ! </p>
+        </ErrorContent>
+    </ErrorBoundary>
+</article> *@
+@code {
+    bool drawerOpen = true;
+    bool darkMode = false;
+    void DrawerToggle()
+    {
+        drawerOpen = !drawerOpen;
+    }
+    void DarkModeToggle()
+    {
+        darkMode = !darkMode;
+    }
     private ErrorBoundary? errorBoundary;
     protected override void OnParametersSet()
     {
